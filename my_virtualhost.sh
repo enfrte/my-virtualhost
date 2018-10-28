@@ -12,7 +12,7 @@ fi
 # Get user input:
 while [ "$domain" == "" ]
 do
-	echo -e $"Provide a domain. e.g. domain.dev or Ctrl+c to quit."
+	echo -e $"Provide a domain. e.g. domain.lan or Ctrl+c to quit."
 	read domain
 done
 
@@ -24,8 +24,8 @@ documentRoot='/var/www/'$domain'/public_html'
 # Create the directory to store the files
 mkdir -p $documentRoot
 
-# Set permissions and assign permissions to the current user 
-chown -R $USER:www-data $documentRoot
+# Set permissions and assign permissions to the current user. Note: $SUDO_USER works on sudo supported systems. Try sudo bash -c 'echo $SUDO_USER' You can also hard code your username if you want. 
+chown -R $SUDO_USER:www-data $documentRoot
 
 # Write this to Apache's sites-available.conf
 > '/etc/apache2/sites-available/'$domain'.conf' cat <<EOF
@@ -65,4 +65,3 @@ echo -e "127.0.0.1\t"$domain >> /etc/hosts
 
 # Restart apache
 service apache2 restart
-
